@@ -1,4 +1,4 @@
-# Project Kick-off Meeting Notes
+# Project Kick-off Meeting Notes (30 January, 2025)
 
 ## Project Proposal Feedback
 
