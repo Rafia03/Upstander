@@ -26,13 +26,13 @@ This project aims to enhance the **Canadian Museum for Human Rights (CMHR)** Ups
 
 ## Project Phases
 
-1. **Research and Planning (Completed)**:
+1. **Research and Planning (Completed on 20 February)**:
    - Analyzed the existing Upstander Program and identified key requirements.
    - Conducted stakeholder interviews to understand user needs.
    - Researched AI techniques suitable for personalization.
    - Developed detailed project specifications and a timeline.
 
-2. **Initial Development and Prototyping**:
+2. **Initial Development and Prototyping (In progress, targeted to be complete on 18 March)**:
    - Implement foundational features, such as data processing and content integration.
    - Develop a basic chatbot for testing AI feasibility.
    - Create a prototype for user feedback.
