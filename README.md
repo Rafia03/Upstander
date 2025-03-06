@@ -75,4 +75,8 @@ This project aims to enhance the **Canadian Museum for Human Rights (CMHR)** Ups
 
 We would like to thank **Canadian Museum for Human Rights (CMHR)** for guidance and support throughout this project.
 
+## Timeline and Phases Delay
+
+The project timeline has experienced some delays due to the postponed kick-off meeting and delays in receiving the necessary data. As a result, the planned phases have been pushed back, and certain tasks that depend on the availability of this data are also delayed. We are actively working to catch up and ensure that the remaining tasks will be completed according to the adjusted timeline. We appreciate your understanding and will keep all stakeholders updated on any further changes.
+
 ---
