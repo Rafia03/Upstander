@@ -19,9 +19,31 @@ This document outlines the findings from the research and planning phase of the 
 - **Example:** The chatbot asks users about their interests, personal strengths, and provides **personalized recommendations**.
 
 ### **Tools and Libraries**
-- **OpenAI’s ChatGPT API** – For building the conversational AI chatbot.
-- **Pandas** – For processing and analyzing UAP data.
-- **Flask** – For building the backend server.
+
+#### Backend Implementation (Python)
+- **Flask** - Micro web framework for building RESTful API endpoints.
+- **Flask-CORS** - Extension for handling Cross-Origin Resource Sharing.
+- **Pandas** - Data manipulation and analysis of CSV datasets.
+- **Requests** - HTTP client for external API communication.
+- **Python-dotenv** - Environment variable management.
+- **Re** - Regular expressions for string processing *(Python standard library)*.
+- **Random** - Random data generation *(Python standard library)*.
+- **OS** - Operating system interaction *(Python standard library)*.
+
+#### Frontend Implementation
+- **Google Fonts** - `Montserrat` font for modern typography.
+- **Animate.css** - Cross-browser CSS animations.
+
+#### AI Service Integration
+- **Hugging Face API** - Cloud-hosted inference endpoint for:
+  - Model: `Mistral-7B-Instruct-v0.2` LLM.
+  - *Requires API key for authentication*.
+
+#### Data Formats
+- **CSV** - Primary storage format for UAP location datasets.
+- **JSON** - Standard format for API request/response payloads.
+
+> **Note:** Items marked *(Python standard library)* require no additional installation.
 
 ## Data Review
 
