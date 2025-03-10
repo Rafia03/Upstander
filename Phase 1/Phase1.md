@@ -5,6 +5,16 @@
 ### Introduction
 This document outlines the findings from the research and planning phase of the project aimed at enhancing the **Canadian Museum for Human Rights (CMHR) Upstander Program** through **AI-driven personalization**. The goal is to create a tailored, interactive experience that deepens users’ connection with human rights issues and empowers them to take action.
 
+### Kick-off Meeting Feedback
+**Key Takeaways:**
+- Focus on MVP rather than an overly ambitious scope
+- Prioritize a single critical feature for effectiveness
+- AI should enhance engagement, not be added for novelty
+
+**Incorporation into Project Phases:**
+- Focused on a chatbot-based interactive journey
+- Prioritized personalization & user engagement
+
 ### Initial Findings from CMHR Consultation and Web Content
 - The **Upstander Program** inspires individuals, particularly youth, to recognize injustices, identify their strengths, and take action.
 - AI should enhance the program by providing **tailored content** and guiding users through the **three core components** of the program.
