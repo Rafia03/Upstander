@@ -1,1 +1,570 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CMHR Upstander Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f3f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #1a365d;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .tagline {
+            font-style: italic;
+            margin-top: 10px;
+        }
+        #chatbox {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        #chatbox:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        #chatlog {
+            height: 350px;
+            overflow-y: scroll;
+            padding: 20px;
+            background-color: white;
+        }
+        .user-msg, .bot-msg {
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation-duration: 0.5s;
+        }
+        .user-msg {
+            background-color: #1a365d;
+            color: white;
+            margin-left: auto;
+            animation-name: fadeInRight;
+        }
+        .bot-msg {
+            background-color: #f1f1f1;
+            margin-right: auto;
+            animation-name: fadeInLeft;
+        }
+        .input-area {
+            display: flex;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+        #userInput {
+            flex-grow: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        #userInput:focus {
+            border-color: #1a365d;
+            box-shadow: 0 0 0 2px rgba(26, 54, 93, 0.2);
+        }
+        button {
+            background-color: #1a365d;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2c4a7c;
+            transform: scale(1.05);
+        }
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .option-btn {
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            animation: fadeIn 0.5s;
+        }
+        .option-btn:hover {
+            background-color: #1a365d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .info-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .info-panel h2 {
+            margin-top: 0;
+            color: #1a365d;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        /* New elements for enhanced interactivity */
+        .strength-meter {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        .strength-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+            flex: 1;
+            margin: 0 5px;
+        }
+        .strength-item:hover {
+            background: #e0e0e0;
+        }
+        .strength-item.active {
+            background: #1a365d;
+            color: white;
+        }
+        .strength-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .upstander-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s;
+        }
+        .upstander-card h3 {
+            margin-top: 0;
+            color: #1a365d;
+        }
+        .typing-indicator {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f1f1f1;
+            border-radius: 18px;
+            margin-bottom: 10px;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            float: left;
+            margin: 0 1px;
+            background-color: #666;
+            display: block;
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+        .typing-indicator span:nth-of-type(1) {
+            animation: typing 1s infinite;
+        }
+        .typing-indicator span:nth-of-type(2) {
+            animation: typing 1s 0.33s infinite;
+        }
+        .typing-indicator span:nth-of-type(3) {
+            animation: typing 1s 0.66s infinite;
+        }
+        
+        @keyframes typing {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translate3d(-20px, 0, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translate3d(20px, 0, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            position: relative;
+            margin-top: 5px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #1a365d;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            #chatlog {
+                height: 300px;
+            }
+            .strength-meter {
+                flex-direction: column;
+            }
+            .strength-item {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Canadian Museum for Human Rights</h1>
+            <div class="tagline">Upstander Program: Discover Your Power to Make a Difference</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Progress tracking -->
+        <div class="progress-container">
+            <div>Your Upstander Journey</div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 10%;"></div>
+            </div>
+        </div>
+        
+        <div id="chatbox">
+            <div id="chatlog"></div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Type your message...">
+                <button id="sendBtn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+        
+        <!-- Strength selector (initially hidden) -->
+        <div id="strengthMeter" class="strength-meter" style="display: none;">
+            <div class="strength-item" data-strength="courage" onclick="selectStrength('courage')">
+                <div class="strength-icon">💪</div>
+                <div>Courage</div>
+            </div>
+            <div class="strength-item" data-strength="empathy" onclick="selectStrength('empathy')">
+                <div class="strength-icon">❤️</div>
+                <div>Empathy</div>
+            </div>
+            <div class="strength-item" data-strength="persistence" onclick="selectStrength('persistence')">
+                <div class="strength-icon">⏱️</div>
+                <div>Persistence</div>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h2>About the Upstander Program</h2>
+            <p>The Upstander Program at the Canadian Museum for Human Rights aims to inspire individuals to recognize injustice, identify their strengths, and take meaningful action for human rights.</p>
+            <p>Through this interactive experience, you'll discover your unique upstander qualities and learn about inspirational figures who have made a difference in the world.</p>
+            
+            <!-- This div will show upstander info based on selected strength -->
+            <div id="upstanderInfo" class="upstander-card" style="display: none;">
+                <!-- Content will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© Canadian Museum for Human Rights. This project was developed to enhance the Upstander Program experience.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Store session data
+        let sessionData = null;
+        let userStrength = "";
+        let journeyProgress = 10; // Start at 10%
+        
+        // Initialize chat with welcome message
+        document.addEventListener('DOMContentLoaded', async function() {
+            const chatlog = document.getElementById('chatlog');
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Remove typing indicator after delay and show message
+            setTimeout(() => {
+                removeTypingIndicator();
+                chatlog.innerHTML = `<div class="bot-msg">Welcome to the Canadian Museum for Human Rights Upstander Program! I'm here to help you discover your inner upstander. Would you like to learn about becoming an upstander?</div>`;
+                
+                // Initial options
+                addOptions(["Yes, I'd like to learn more", "What is an upstander?", "Tell me about the museum"]);
+            }, 1500);
+            
+            // Add button hover effects
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            sendBtn.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+        
+        function updateProgress(value) {
+            journeyProgress = value;
+            document.getElementById('progressFill').style.width = `${value}%`;
+        }
+        
+        function showTypingIndicator() {
+            const chatlog = document.getElementById('chatlog');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatlog.appendChild(typingDiv);
+            chatlog.scrollTop = chatlog.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+        
+        function selectStrength(strength) {
+            userStrength = strength;
+            
+            // Update visual indicator
+            document.querySelectorAll('.strength-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.strength-item[data-strength="${strength}"]`).classList.add('active');
+            
+            // Update progress
+            updateProgress(40);
+            
+            // Show upstander info based on strength
+            showUpstanderInfo(strength);
+            
+            // Send the selected strength to the bot
+            sendMessage(`My strength is ${strength}`);
+        }
+        
+        function showUpstanderInfo(strength) {
+            const upstanderInfo = document.getElementById('upstanderInfo');
+            let content = '';
+            
+            if (strength === 'courage') {
+                content = `
+                    <h3>Viola Desmond</h3>
+                    <p>In 1946, Viola Desmond refused to leave a whites-only area of a Nova Scotia theater, 
+                    challenging racial segregation in Canada. Her image now appears on the Canadian $10 bill.</p>
+                `;
+            } else if (strength === 'empathy') {
+                content = `
+                    <h3>Craig Kielburger</h3>
+                    <p>At age 12, Craig was moved by the story of a child laborer and founded Free The Children 
+                    (now WE Charity) to fight child labor and promote education worldwide.</p>
+                `;
+            } else if (strength === 'persistence') {
+                content = `
+                    <h3>Nelson Mandela</h3>
+                    <p>Despite being imprisoned for 27 years for fighting against apartheid, 
+                    Nelson Mandela continued his advocacy and became South Africa's first Black president.</p>
+                `;
+            }
+            
+            upstanderInfo.innerHTML = content;
+            upstanderInfo.style.display = 'block';
+        }
+        
+        async function sendMessage(optionText) {
+            try {
+                const userInput = document.getElementById('userInput');
+                const chatlog = document.getElementById('chatlog');
+                
+                // Use option text if provided, otherwise use text from input
+                const messageText = optionText || userInput.value;
+                
+                if (!messageText.trim()) return;  // Don't send empty messages
+                
+                // Add user message to chat with animation
+                chatlog.innerHTML += `<div class="user-msg">${messageText}</div>`;
+                chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
+                
+                // Clear input if using the input field
+                if (!optionText) {
+                    userInput.value = '';
+                }
+                
+                // Remove previous options
+                const optionsContainer = document.querySelector('.options-container');
+                if (optionsContainer) {
+                    optionsContainer.remove();
+                }
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Check for strength-related keywords to show strength meter
+                if (messageText.toLowerCase().includes('strength') || 
+                    messageText.toLowerCase().includes('my quality') ||
+                    messageText.toLowerCase().includes('personality')) {
+                    document.getElementById('strengthMeter').style.display = 'flex';
+                    updateProgress(30);
+                }
+                
+                // Get the current port from the window location
+                const port = window.location.port || "5002";  // Default to 5002
+                
+                // Send message to server with session data
+                const response = await fetch(`http://127.0.0.1:${port}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: messageText,
+                        session_data: sessionData
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error("Failed to get response from server");
+                }
+                
+                const data = await response.json();
+                
+                // Update session data
+                sessionData = data.session_data;
+                
+                // Remove typing indicator
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    
+                    // Add bot message to chat with animation
+                    chatlog.innerHTML += `<div class="bot-msg">${data.response}</div>`;
+                    
+                    // Increment progress based on interaction
+                    updateProgress(Math.min(journeyProgress + 10, 100));
+                    
+                    // Add next question if available
+                    if (data.next_question) {
+                        setTimeout(() => {
+                            chatlog.innerHTML += `<div class="bot-msg">${data.next_question}</div>`;
+                            chatlog.scrollTop = chatlog.scrollHeight;
+                        }, 1000);
+                    }
+                    
+                    // Add options if available
+                    if (data.options && data.options.length > 0) {
+                        addOptions(data.options);
+                    }
+                    
+                    chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                removeTypingIndicator();
+                document.getElementById('chatlog').innerHTML += 
+                    `<div class="bot-msg" style="color: #d9534f;">Sorry, there was an error communicating with the server. Please try again.</div>`;
+            }
+        }
+        
+        function addOptions(options) {
+            const chatlog = document.getElementById('chatlog');
+            
+            // Create options container
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            // Add option buttons
+            options.forEach(option => {
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn';
+                optionBtn.textContent = option;
+                optionBtn.onclick = function() {
+                    sendMessage(option);
+                };
+                optionsContainer.appendChild(optionBtn);
+            });
+            
+            chatlog.appendChild(optionsContainer);
+            chatlog.scrollTop = chatlog.scrollHeight;
+        }
+        
+        // Allow sending message with Enter key
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
