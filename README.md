@@ -70,7 +70,7 @@ This project aims to enhance the **Canadian Museum for Human Rights (CMHR)** Ups
 ## Contributors
 
 - **Rafia Rafa Islam**
-- 
+- **Chin Wei, Mak**
 ## Acknowledgments
 
 We would like to thank **Canadian Museum for Human Rights (CMHR)** for guidance and support throughout this project.
