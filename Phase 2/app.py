@@ -161,7 +161,63 @@ def get_response(user_input, session_data=None):
     if not session_data:
         session_data = {"stage": "intro", "strengths": [], "progress": 10}
     
-    # FIRST - Check for direct questions about upstanders/human rights topics
+    # FIRST - Check for open-ended questions or general queries
+    if len(user_input) > 5 and not user_input.startswith(("Yes", "No", "How", "What", "Tell me")):
+        print(f"Processing open-ended question: {user_input}")
+        
+        # Create a detailed prompt for AI response
+        ai_prompt = f"""<s>[INST] You are an educational AI assistant for the Canadian Museum for Human Rights' Upstander Program.
+        
+        The program focuses on:
+        - Recognizing injustice and discrimination
+        - Identifying personal strengths to make a difference
+        - Learning from historical and contemporary upstanders
+        
+        Key upstanders include:
+        - Viola Desmond: Canadian civil rights activist who challenged racial segregation
+        - Malala Yousafzai: Education activist who stood up to the Taliban
+        - Nelson Mandela: Anti-apartheid activist who became South Africa's first Black president
+        - Craig Kielburger: Founded Free The Children at age 12 to fight child labor
+        
+        Please provide a thoughtful, informative response to: {user_input}
+        
+        Keep your answer focused on:
+        1. How this relates to being an upstander
+        2. Relevant historical examples or parallels
+        3. Practical ways to apply this in daily life
+        
+        Keep your response to 2-3 sentences, engaging and conversational.
+        [/INST]</s>
+        """
+        
+        # Try to get AI response
+        ai_response = generate_ai_response(ai_prompt)
+        
+        # If we got a valid AI response, use it and maintain the current conversation stage
+        if ai_response and len(ai_response) > 20:  # Ensure it's substantial
+            # Clean up the response
+            ai_response = ai_response.replace("[/INST]", "").replace("<s>", "").replace("</s>", "").strip()
+            
+            # Don't change the session stage for these informational questions
+            current_stage = session_data["stage"]  # Keep current stage
+            current_progress = session_data.get("progress", 10)  # Keep current progress
+            
+            # Add follow-up options based on the context
+            follow_up_options = [
+                "Tell me more about this",
+                "How can I apply this in my life?",
+                "Are there other examples?",
+                "Continue with my journey"
+            ]
+            
+            # Return response while preserving conversation state
+            return {
+                "response": ai_response,
+                "options": follow_up_options,
+                "session_data": session_data  # Maintain current session state
+            }
+    
+    # Check for direct questions about upstanders/human rights topics
     upstander_keywords = [
         "viola desmond", "malala", "nelson mandela", "mandela", "kielburger", 
         "human rights", "segregation", "discrimination", "apartheid", 
@@ -169,7 +225,7 @@ def get_response(user_input, session_data=None):
     ]
     
     # If user is directly asking about an upstander or human rights topic
-    if any(keyword in user_input.lower() for keyword in upstander_keywords) and not user_input.startswith("Yes") and not user_input.startswith("How") and len(user_input) > 5:
+    if any(keyword in user_input.lower() for keyword in upstander_keywords):
         print(f"Detected upstander question: {user_input}")
         
         # Create a detailed prompt for AI response
@@ -204,9 +260,18 @@ def get_response(user_input, session_data=None):
             current_stage = session_data["stage"]  # Keep current stage
             current_progress = session_data.get("progress", 10)  # Keep current progress
             
+            # Add relevant follow-up options
+            follow_up_options = [
+                "Tell me more about this",
+                "How can I apply this in my life?",
+                "Are there other examples?",
+                "Continue with my journey"
+            ]
+            
             # Return response while preserving conversation state
             return {
                 "response": ai_response,
+                "options": follow_up_options,
                 "session_data": session_data  # Maintain current session state
             }
     
@@ -481,7 +546,8 @@ def get_response(user_input, session_data=None):
                 "session_data": session_data
             }
     
-
+    # Try AI response if we haven't matched a conversation path
+    # ... rest of your AI response code ...
     
     # Default response if all else fails
     return {"response": "I'm here to help with the Upstander Program. Ask me about upstanders, UAP locations, or how to identify your strengths.", "session_data": session_data}
@@ -523,4 +589,4 @@ if __name__ == '__main__':
     else:
         print("Hugging Face API token found. AI responses are enabled.")
     
-    app.run(debug=True, port=5002) 
+    app.run(debug=True, port=5002)  
