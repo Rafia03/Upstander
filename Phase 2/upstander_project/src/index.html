@@ -5,282 +5,329 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f0f3f5;
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #9d00ff;
+            --text-light: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            color: #333;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Orbitron', 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(157, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 50%);
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem;
         }
+
         header {
-            background-color: #1a365d;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        h1 {
-            margin: 0;
-            font-size: 2.2em;
-        }
-        .tagline {
-            font-style: italic;
-            margin-top: 10px;
-        }
-        #chatbox {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: var(--bg-darker);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
             overflow: hidden;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
         }
-        #chatbox:hover {
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            animation: borderGlow 3s linear infinite;
         }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .tagline {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        #chatbox {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
         #chatlog {
-            height: 350px;
-            overflow-y: scroll;
-            padding: 20px;
-            background-color: white;
+            height: 400px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: transparent;
         }
+
         .user-msg, .bot-msg {
-            padding: 12px 16px;
-            margin-bottom: 10px;
-            border-radius: 18px;
-            max-width: 80%;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: 1rem;
+            max-width: 85%;
             word-wrap: break-word;
-            animation-duration: 0.5s;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            backdrop-filter: blur(5px);
         }
+
         .user-msg {
-            background-color: #1a365d;
-            color: white;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(157, 0, 255, 0.1));
+            border: 1px solid var(--neon-blue);
+            color: var(--text-light);
             margin-left: auto;
-            animation-name: fadeInRight;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
         }
+
         .bot-msg {
-            background-color: #f1f1f1;
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(157, 0, 255, 0.1));
+            border: 1px solid var(--neon-pink);
+            color: var(--text-light);
             margin-right: auto;
-            animation-name: fadeInLeft;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
         }
+
         .input-area {
             display: flex;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-top: 1px solid #eee;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-top: 1px solid var(--glass-border);
+            gap: 0.75rem;
         }
+
         #userInput {
-            flex-grow: 1;
-            padding: 12px 16px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            font-size: 1em;
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-darker);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
             outline: none;
-            transition: border 0.3s ease;
+            transition: all 0.3s;
         }
+
         #userInput:focus {
-            border-color: #1a365d;
-            box-shadow: 0 0 0 2px rgba(26, 54, 93, 0.2);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
         }
+
         button {
-            background-color: #1a365d;
-            color: white;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: var(--text-light);
             border: none;
-            border-radius: 25px;
-            padding: 12px 20px;
-            margin-left: 10px;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
             cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        button:hover {
-            background-color: #2c4a7c;
-            transform: scale(1.05);
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
+
+        button:hover::before {
+            left: 100%;
+        }
+
         .options-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 0.75rem;
+            margin-top: 1rem;
         }
+
         .option-btn {
-            background-color: #f1f1f1;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            padding: 8px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
             cursor: pointer;
-            font-size: 0.9em;
             transition: all 0.3s;
-            animation: fadeIn 0.5s;
         }
+
         .option-btn:hover {
-            background-color: #1a365d;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(157, 0, 255, 0.1));
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
         }
+
         .info-panel {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
         }
+
         .info-panel h2 {
-            margin-top: 0;
-            color: #1a365d;
+            color: var(--neon-blue);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
         }
+
         footer {
             text-align: center;
-            margin-top: 30px;
-            padding: 20px 0;
-            color: #666;
-            font-size: 0.9em;
+            padding: 2rem 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
         }
-        
-        /* New elements for enhanced interactivity */
-        .strength-meter {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            padding: 10px;
-            background: #f5f5f5;
-            border-radius: 10px;
-        }
-        .strength-item {
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            cursor: pointer;
-            flex: 1;
-            margin: 0 5px;
-        }
-        .strength-item:hover {
-            background: #e0e0e0;
-        }
-        .strength-item.active {
-            background: #1a365d;
-            color: white;
-        }
-        .strength-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        .upstander-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            animation: fadeIn 0.5s;
-        }
-        .upstander-card h3 {
-            margin-top: 0;
-            color: #1a365d;
-        }
-        .typing-indicator {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #f1f1f1;
-            border-radius: 18px;
-            margin-bottom: 10px;
-        }
-        .typing-indicator span {
-            height: 8px;
-            width: 8px;
-            float: left;
-            margin: 0 1px;
-            background-color: #666;
-            display: block;
-            border-radius: 50%;
-            opacity: 0.4;
-        }
-        .typing-indicator span:nth-of-type(1) {
-            animation: typing 1s infinite;
-        }
-        .typing-indicator span:nth-of-type(2) {
-            animation: typing 1s 0.33s infinite;
-        }
-        .typing-indicator span:nth-of-type(3) {
-            animation: typing 1s 0.66s infinite;
-        }
-        
-        @keyframes typing {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
-        }
-        
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translate3d(-20px, 0, 0);
-            }
-            to {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-            }
-        }
-        
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translate3d(20px, 0, 0);
-            }
-            to {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
+
         /* Progress Bar */
         .progress-container {
-            margin: 20px 0;
-            background: #fff;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
         }
+
         .progress-bar {
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 5px;
-            position: relative;
-            margin-top: 5px;
+            height: 0.5rem;
+            background: var(--bg-darker);
+            border-radius: 0.25rem;
+            margin-top: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
         }
+
         .progress-fill {
             height: 100%;
-            background: #1a365d;
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 0.25rem;
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
         }
-        
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.75rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .typing-indicator span {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            animation: typing 1s infinite;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-0.25rem); opacity: 1; }
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-msg, .bot-msg {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-purple);
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 1rem;
             }
+
             #chatlog {
-                height: 300px;
+                height: 350px;
+                padding: 1rem;
             }
-            .strength-meter {
-                flex-direction: column;
+
+            .user-msg, .bot-msg {
+                max-width: 90%;
             }
-            .strength-item {
-                margin: 5px 0;
+
+            .input-area {
+                padding: 0.75rem;
+            }
+
+            button {
+                padding: 0.75rem 1rem;
             }
         }
     </style>
@@ -495,33 +542,39 @@
                 // Update session data
                 sessionData = data.session_data;
 
-                // Remove typing indicator
+                // Remove typing indicator after delay and show message
                 setTimeout(() => {
                     removeTypingIndicator();
 
-                    // Add bot response
-                    chatlog.innerHTML += `<div class="bot-msg">${data.response}</div>`;
-
-                
-                    
-
-                    // Update progress
-                   //(Math.min(journeyProgress + 10, 100));
+                    // Clean and process bot response
+                    let cleanResponse = data.response;
+                    // Remove debug code blocks
+                    cleanResponse = cleanResponse.replace(/```[\s\S]*?```/g, '').trim();
+                    // Remove template variables
+                    cleanResponse = cleanResponse.replace(/\{[^}]+\}/g, '').trim();
+                    chatlog.innerHTML += `<div class="bot-msg">${cleanResponse}</div>`;
 
                     // Add next question if available
                     if (data.next_question) {
+                        let cleanQuestion = data.next_question;
+                        // Remove debug code blocks
+                        cleanQuestion = cleanQuestion.replace(/```[\s\S]*?```/g, '').trim();
+                        // Remove template variables
+                        cleanQuestion = cleanQuestion.replace(/\{[^}]+\}/g, '').trim();
                         setTimeout(() => {
-                            chatlog.innerHTML += `<div class="bot-msg">${data.next_question}</div>`;
+                            chatlog.innerHTML += `<div class="bot-msg">${cleanQuestion}</div>`;
                             chatlog.scrollTop = chatlog.scrollHeight;
                         }, 1000);
                     }
 
                     // Add options if available
                     if (data.options && data.options.length > 0) {
-                        addOptions(data.options);
+                        // Clean options of any template variables
+                        const cleanOptions = data.options.map(option => 
+                            option.replace(/\{[^}]+\}/g, '').trim()
+                        );
+                        addOptions(cleanOptions);
                     }
-
-                    
 
                     chatlog.scrollTop = chatlog.scrollHeight; // Auto-scroll
                 }, 1500);
@@ -534,99 +587,6 @@
             }
         }
 
-        
-        // async function sendMessage(optionText) {
-        //     try {
-        //         const userInput = document.getElementById('userInput');
-        //         const chatlog = document.getElementById('chatlog');
-                
-        //         // Use option text if provided, otherwise use text from input
-        //         const messageText = optionText || userInput.value;
-                
-        //         if (!messageText.trim()) return;  // Don't send empty messages
-                
-        //         // Add user message to chat with animation
-        //         chatlog.innerHTML += `<div class="user-msg">${messageText}</div>`;
-        //         chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
-                
-        //         // Clear input if using the input field
-        //         if (!optionText) {
-        //             userInput.value = '';
-        //         }
-                
-        //         // Remove previous options
-        //         const optionsContainer = document.querySelector('.options-container');
-        //         if (optionsContainer) {
-        //             optionsContainer.remove();
-        //         }
-                
-        //         // Show typing indicator
-        //         showTypingIndicator();
-                
-        //         // Check for strength-related keywords to show strength meter
-        //         if (messageText.toLowerCase().includes('strength') || 
-        //             messageText.toLowerCase().includes('my quality') ||
-        //             messageText.toLowerCase().includes('personality')) {
-        //             document.getElementById('strengthMeter').style.display = 'flex';
-        //             updateProgress(30);
-        //         }
-                
-        //         // Get the current port from the window location
-        //         const port = window.location.port || "5002";  // Default to 5002
-                
-        //         // Send message to server with session data
-        //         const response = await fetch(`http://127.0.0.1:${port}/chat`, {
-        //             method: 'POST',
-        //             headers: { 'Content-Type': 'application/json' },
-        //             body: JSON.stringify({ 
-        //                 message: messageText,
-        //                 session_data: sessionData
-        //             })
-        //         });
-                
-        //         if (!response.ok) {
-        //             throw new Error("Failed to get response from server");
-        //         }
-                
-        //         const data = await response.json();
-                
-        //         // Update session data
-        //         sessionData = data.session_data;
-                
-        //         // Remove typing indicator
-        //         setTimeout(() => {
-        //             removeTypingIndicator();
-                    
-        //             // Add bot message to chat with animation
-        //             chatlog.innerHTML += `<div class="bot-msg">${data.response}</div>`;
-                    
-        //             // Increment progress based on interaction
-        //             updateProgress(Math.min(journeyProgress + 10, 100));
-                    
-        //             // Add next question if available
-        //             if (data.next_question) {
-        //                 setTimeout(() => {
-        //                     chatlog.innerHTML += `<div class="bot-msg">${data.next_question}</div>`;
-        //                     chatlog.scrollTop = chatlog.scrollHeight;
-        //                 }, 1000);
-        //             }
-                    
-        //             // Add options if available
-        //             if (data.options && data.options.length > 0) {
-        //                 addOptions(data.options);
-        //             }
-                    
-        //             chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
-        //         }, 1500);
-                
-        //     } catch (error) {
-        //         console.error('Error:', error);
-        //         removeTypingIndicator();
-        //         document.getElementById('chatlog').innerHTML += 
-        //             `<div class="bot-msg" style="color: #d9534f;">Sorry, there was an error communicating with the server. Please try again.</div>`;
-        //     }
-        // }
-        
         function addOptions(options) {
             const chatlog = document.getElementById('chatlog');
             
@@ -718,5 +678,4 @@
 
 
 </html>
-
 
