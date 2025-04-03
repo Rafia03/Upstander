@@ -207,14 +207,17 @@ def get_response(user_input, session_data):
     current_stage = session_data['current_stage']
     stage_info = conversation_stages.get(current_stage, {})
     
-
-    
     # Generate response
     response = generate_ai_response(user_input, current_stage, session_data)
     print(current_stage)
     
+    # Clean up the response by replacing template variables with actual stage messages
+    if response and '{stage_message}' in response:
+        stage_message = conversation_stages.get(current_stage, {}).get('message', '')
+        response = response.replace('{stage_message}', stage_message)
     
-    data = { "response": response,
+    data = {
+        "response": response,
         "session_data": session_data,
         "current_stage": session_data['current_stage'],
         "options": conversation_stages[session_data['current_stage']].get("options", []),
