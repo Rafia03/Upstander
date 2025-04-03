@@ -57,7 +57,7 @@ def chat():
                 'progress': 0,
                 'responses': [],
                 'selected_options': [],
-                'user_data': {} ,
+                'user_data': {},
                 'selected_characteristic': None
             }
             
@@ -80,13 +80,13 @@ def chat():
                     next_stage = stages[current_index + 1]
                     session_data['current_stage'] = next_stage
                     session_data['progress'] = min(100, (current_index + 1) * (100 // len(stages)))
+                    # Get the actual message for the next stage
                     response = conversation_stages[next_stage]["message"]
                 else:
                     response = "You've completed all stages!"
             
             except ValueError:
                 response = "Invalid conversation stage."
-        
             
             return jsonify({
                 "response": response,
@@ -96,18 +96,14 @@ def chat():
                 "progress": session_data['progress']
             })
 
-            
-          
-          
         selected_characteristic = session_data.get("selected_characteristic", "")
 
-        # Handle `explain_upstander` stage → Selecting a characteristic (e.g., "courage", "empathy")
+        # Handle `explain_upstander` stage
         if session_data.get("current_stage") == "explain_upstander" and user_input in upstander_stories.keys() and selected_characteristic is None:
             upstander_names = [story["name"] for story in upstander_stories[user_input]]
             response_text = f"Here are some upstanders who exhibit {user_input}: {', '.join(upstander_names)}"
-            options = upstander_names  # Provide upstander names as options
+            options = upstander_names
 
-            # Save selected characteristic and transition to the next stage
             session_data["selected_characteristic"] = user_input
             session_data["current_stage"] = "identify_upstander"
 
@@ -119,22 +115,20 @@ def chat():
                 "progress": session_data['progress']
             })
 
-        # Handle `identify_upstander` stage → Selecting a specific Upstander
+        # Handle `identify_upstander` stage
         elif session_data.get("current_stage") == "identify_upstander" and selected_characteristic in upstander_stories.keys():
-            for story in upstander_stories[selected_characteristic]:  # Iterate over the list of stories
-                if user_input.lower() == story["name"].lower():  # Match the selected name
+            for story in upstander_stories[selected_characteristic]:
+                if user_input.lower() == story["name"].lower():
                     response_text = f"{story['name']} was an upstander because: {story['story']} \nImpact: {story['impact']}"
                     
-                    # Stay in the same stage to allow further exploration
                     return jsonify({
                         "response": response_text,
                         "session_data": session_data,
                         "current_stage": session_data['current_stage'],
-                        "options": [s["name"] for s in upstander_stories[selected_characteristic]],  # Provide the same options
+                        "options": [s["name"] for s in upstander_stories[selected_characteristic]],
                         "progress": session_data['progress']
                     })
 
-            # If the input does not match any upstander name, return an error message
             return jsonify({
                 "response": "Please select a valid upstander name from the options.",
                 "session_data": session_data,
@@ -143,28 +137,28 @@ def chat():
                 "progress": session_data['progress']
             })
 
-    
-         
-        
+        # Get response from the AI model
         result = get_response(user_input, session_data)
-        response = result["response"]
-        # CRITICAL: Make sure progress is explicitly set to 100% if we're in final stage
-        #if result.get('session_data', {}).get('stage') == 'final':
-         #   result['session_data']['progress'] = 100
-         #   print("ENFORCING 100% progress for final stage")
         
-        print(f"Result after: {result}")
-        return  jsonify({
-                            "response": response,
-                            "session_data": session_data,
-                            "current_stage": session_data['current_stage'],
-                            "options": [],
-                            "progress": session_data['progress']
-                        })
+        # Clean up the response by removing template variables
+        response = result["response"]
+        if response:
+            # Remove template variables like {stage_message}
+            response = re.sub(r'\{[^}]+\}', '', response).strip()
+            # Remove any extra whitespace
+            response = ' '.join(response.split())
+        
+        return jsonify({
+            "response": response,
+            "session_data": session_data,
+            "current_stage": session_data['current_stage'],
+            "options": [],
+            "progress": session_data['progress']
+        })
     
     except Exception as e:
-       print(f"Error in chat endpoint: {str(e)}")
-     #   return jsonify({"response": "An error occurred while processing your request. Please try again."})
+        print(f"Error in chat endpoint: {str(e)}")
+        return jsonify({"response": "An error occurred while processing your request. Please try again."})
 
 
 @app.route('/')
