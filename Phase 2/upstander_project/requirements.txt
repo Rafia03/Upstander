@@ -1,9 +1,0 @@
-Flask
-Flask-CORS
-Flask-Session
-pandas
-python-dotenv
-requests
-numpy
-setuptools
-google.generativeai
