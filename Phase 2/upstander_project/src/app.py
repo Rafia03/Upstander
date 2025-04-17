@@ -105,7 +105,7 @@ def chat():
             options = upstander_names
 
             session_data["selected_characteristic"] = user_input
-            session_data["current_stage"] = "identify_upstander"
+            #session_data["current_stage"] = "identify_upstander" # TODO
 
             return jsonify({
                 "response": response_text,
@@ -115,8 +115,8 @@ def chat():
                 "progress": session_data['progress']
             })
 
-        # Handle `identify_upstander` stage
-        elif session_data.get("current_stage") == "identify_upstander" and selected_characteristic in upstander_stories.keys():
+       
+        elif session_data.get("current_stage") == "explain_upstander" and selected_characteristic in upstander_stories.keys():
             for story in upstander_stories[selected_characteristic]:
                 if user_input.lower() == story["name"].lower():
                     response_text = f"{story['name']} was an upstander because: {story['story']} \nImpact: {story['impact']}"
@@ -129,13 +129,48 @@ def chat():
                         "progress": session_data['progress']
                     })
 
-            return jsonify({
-                "response": "Please select a valid upstander name from the options.",
-                "session_data": session_data,
-                "current_stage": session_data['current_stage'],
-                "options": [s["name"] for s in upstander_stories[selected_characteristic]],
-                "progress": session_data['progress']
-            })
+            # return jsonify({
+            #     "response": "Please select a valid upstander name from the options.",
+            #     "session_data": session_data,
+            #     "current_stage": session_data['current_stage'],
+            #     "options": [s["name"] for s in upstander_stories[selected_characteristic]],
+            #     "progress": session_data['progress']
+            # })
+        
+            # Handle `identify_upstander` stage without needing selected_characteristic
+        elif session_data.get("current_stage") == "identify_upstander":
+            found_story = None
+            matched_characteristic = None
+            
+            for characteristic, stories in upstander_stories.items():
+                for story in stories:
+                    if user_input.lower() == story["name"].lower():
+                        found_story = story
+                        matched_characteristic = characteristic
+                        break
+                if found_story:
+                    break
+
+            if found_story:
+                response_text = f"{found_story['name']} was an upstander because: {found_story['story']} \nImpact: {found_story['impact']}"
+                options = [s["name"] for s in upstander_stories[matched_characteristic]]
+
+                return jsonify({
+                    "response": response_text,
+                    "session_data": session_data,
+                    "current_stage": session_data['current_stage'],
+                    "options": options,
+                    "progress": session_data['progress']
+                })
+
+            # return jsonify({
+            #     "response": "Please select a valid upstander name from the options.",
+            #     "session_data": session_data,
+            #     "current_stage": session_data['current_stage'],
+            #     "options": [s["name"] for stories in upstander_stories.values() for s in stories],
+            #     "progress": session_data['progress']
+            # })
+
 
         # Get response from the AI model
         result = get_response(user_input, session_data)
