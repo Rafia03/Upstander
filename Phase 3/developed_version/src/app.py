@@ -119,13 +119,6 @@ def chat():
                         "progress": session_data['progress']
                     })
 
-            # return jsonify({
-            #     "response": "Please select a valid upstander name from the options.",
-            #     "session_data": session_data,
-            #     "current_stage": session_data['current_stage'],
-            #     "options": [s["name"] for s in upstander_stories[selected_characteristic]],
-            #     "progress": session_data['progress']
-            # })
         
             # Handle `identify_upstander` stage without needing selected_characteristic
         elif session_data.get("current_stage") == "identify_upstander":
@@ -152,14 +145,6 @@ def chat():
                     "options": options,
                     "progress": session_data['progress']
                 })
-
-            # return jsonify({
-            #     "response": "Please select a valid upstander name from the options.",
-            #     "session_data": session_data,
-            #     "current_stage": session_data['current_stage'],
-            #     "options": [s["name"] for stories in upstander_stories.values() for s in stories],
-            #     "progress": session_data['progress']
-            # })
 
 
         print(user_input)
