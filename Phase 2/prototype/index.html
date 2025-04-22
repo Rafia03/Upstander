@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>	
+<html>
 <head>
     <title>CMHR Upstander Program</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
@@ -294,14 +294,11 @@
     </header>
     
     <div class="container">
-        <!-- Progress tracking with button -->
+        <!-- Progress tracking -->
         <div class="progress-container">
             <div>Your Upstander Journey</div>
-            <div class="progress-wrapper">
-                <div class="progress-bar">
-                    <div id="progressFill" class="progress-fill" style="width: 10%;"></div>
-                </div>
-                <button id="nextButton" class="progress-btn">Next</button>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 10%;"></div>
             </div>
         </div>
         
@@ -410,6 +407,8 @@
             });
             document.querySelector(`.strength-item[data-strength="${strength}"]`).classList.add('active');
             
+            // Update progress
+            updateProgress(40);
             
             // Show upstander info based on strength
             showUpstanderInfo(strength);
@@ -445,37 +444,46 @@
             upstanderInfo.innerHTML = content;
             upstanderInfo.style.display = 'block';
         }
-        // Function to send message to the server
+        
         async function sendMessage(optionText) {
             try {
                 const userInput = document.getElementById('userInput');
                 const chatlog = document.getElementById('chatlog');
-
-                // Determine message text (user input or button click)
+                
+                // Use option text if provided, otherwise use text from input
                 const messageText = optionText || userInput.value;
-                if (!messageText.trim()) return; // Don't send empty messages
-
-                // Add user message to chat
+                
+                if (!messageText.trim()) return;  // Don't send empty messages
+                
+                // Add user message to chat with animation
                 chatlog.innerHTML += `<div class="user-msg">${messageText}</div>`;
-                chatlog.scrollTop = chatlog.scrollHeight; // Auto-scroll
-
-                // Clear input field if text is typed manually
+                chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
+                
+                // Clear input if using the input field
                 if (!optionText) {
                     userInput.value = '';
                 }
-
+                
                 // Remove previous options
                 const optionsContainer = document.querySelector('.options-container');
                 if (optionsContainer) {
                     optionsContainer.remove();
                 }
-
+                
                 // Show typing indicator
                 showTypingIndicator();
-
+                
+                // Check for strength-related keywords to show strength meter
+                if (messageText.toLowerCase().includes('strength') || 
+                    messageText.toLowerCase().includes('my quality') ||
+                    messageText.toLowerCase().includes('personality')) {
+                    document.getElementById('strengthMeter').style.display = 'flex';
+                    updateProgress(30);
+                }
+                
                 // Get the current port from the window location
-                const port = window.location.port || "5002"; // Default to 5002
-
+                const port = window.location.port || "5002";  // Default to 5002
+                
                 // Send message to server with session data
                 const response = await fetch(`http://127.0.0.1:${port}/chat`, {
                     method: 'POST',
@@ -485,29 +493,26 @@
                         session_data: sessionData
                     })
                 });
-
+                
                 if (!response.ok) {
                     throw new Error("Failed to get response from server");
                 }
-
+                
                 const data = await response.json();
-
+                
                 // Update session data
                 sessionData = data.session_data;
-
+                
                 // Remove typing indicator
                 setTimeout(() => {
                     removeTypingIndicator();
-
-                    // Add bot response
-                    chatlog.innerHTML += `<div class="bot-msg">${data.response}</div>`;
-
-                
                     
-
-                    // Update progress
-                   //(Math.min(journeyProgress + 10, 100));
-
+                    // Add bot message to chat with animation
+                    chatlog.innerHTML += `<div class="bot-msg">${data.response}</div>`;
+                    
+                    // Increment progress based on interaction
+                    updateProgress(Math.min(journeyProgress + 10, 100));
+                    
                     // Add next question if available
                     if (data.next_question) {
                         setTimeout(() => {
@@ -515,15 +520,13 @@
                             chatlog.scrollTop = chatlog.scrollHeight;
                         }, 1000);
                     }
-
+                    
                     // Add options if available
                     if (data.options && data.options.length > 0) {
                         addOptions(data.options);
                     }
-
                     
-
-                    chatlog.scrollTop = chatlog.scrollHeight; // Auto-scroll
+                    chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
                 }, 1500);
                 
             } catch (error) {
@@ -533,99 +536,6 @@
                     `<div class="bot-msg" style="color: #d9534f;">Sorry, there was an error communicating with the server. Please try again.</div>`;
             }
         }
-
-        
-        // async function sendMessage(optionText) {
-        //     try {
-        //         const userInput = document.getElementById('userInput');
-        //         const chatlog = document.getElementById('chatlog');
-                
-        //         // Use option text if provided, otherwise use text from input
-        //         const messageText = optionText || userInput.value;
-                
-        //         if (!messageText.trim()) return;  // Don't send empty messages
-                
-        //         // Add user message to chat with animation
-        //         chatlog.innerHTML += `<div class="user-msg">${messageText}</div>`;
-        //         chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
-                
-        //         // Clear input if using the input field
-        //         if (!optionText) {
-        //             userInput.value = '';
-        //         }
-                
-        //         // Remove previous options
-        //         const optionsContainer = document.querySelector('.options-container');
-        //         if (optionsContainer) {
-        //             optionsContainer.remove();
-        //         }
-                
-        //         // Show typing indicator
-        //         showTypingIndicator();
-                
-        //         // Check for strength-related keywords to show strength meter
-        //         if (messageText.toLowerCase().includes('strength') || 
-        //             messageText.toLowerCase().includes('my quality') ||
-        //             messageText.toLowerCase().includes('personality')) {
-        //             document.getElementById('strengthMeter').style.display = 'flex';
-        //             updateProgress(30);
-        //         }
-                
-        //         // Get the current port from the window location
-        //         const port = window.location.port || "5002";  // Default to 5002
-                
-        //         // Send message to server with session data
-        //         const response = await fetch(`http://127.0.0.1:${port}/chat`, {
-        //             method: 'POST',
-        //             headers: { 'Content-Type': 'application/json' },
-        //             body: JSON.stringify({ 
-        //                 message: messageText,
-        //                 session_data: sessionData
-        //             })
-        //         });
-                
-        //         if (!response.ok) {
-        //             throw new Error("Failed to get response from server");
-        //         }
-                
-        //         const data = await response.json();
-                
-        //         // Update session data
-        //         sessionData = data.session_data;
-                
-        //         // Remove typing indicator
-        //         setTimeout(() => {
-        //             removeTypingIndicator();
-                    
-        //             // Add bot message to chat with animation
-        //             chatlog.innerHTML += `<div class="bot-msg">${data.response}</div>`;
-                    
-        //             // Increment progress based on interaction
-        //             updateProgress(Math.min(journeyProgress + 10, 100));
-                    
-        //             // Add next question if available
-        //             if (data.next_question) {
-        //                 setTimeout(() => {
-        //                     chatlog.innerHTML += `<div class="bot-msg">${data.next_question}</div>`;
-        //                     chatlog.scrollTop = chatlog.scrollHeight;
-        //                 }, 1000);
-        //             }
-                    
-        //             // Add options if available
-        //             if (data.options && data.options.length > 0) {
-        //                 addOptions(data.options);
-        //             }
-                    
-        //             chatlog.scrollTop = chatlog.scrollHeight;  // Auto-scroll
-        //         }, 1500);
-                
-        //     } catch (error) {
-        //         console.error('Error:', error);
-        //         removeTypingIndicator();
-        //         document.getElementById('chatlog').innerHTML += 
-        //             `<div class="bot-msg" style="color: #d9534f;">Sorry, there was an error communicating with the server. Please try again.</div>`;
-        //     }
-        // }
         
         function addOptions(options) {
             const chatlog = document.getElementById('chatlog');
@@ -655,68 +565,6 @@
                 sendMessage();
             }
         });
-
-        //TODO: 
-        document.getElementById("nextButton").addEventListener("click", function() {
-            sendMessage("[NEXT_STAGE]");  // Triggers the chatbot message flow
-            updateProgress(Math.min(journeyProgress + 20, 100));
-        });
-
-        // Update progress bar on button click
-        // document.getElementById("nextButton").addEventListener("click", function() {
-        //     if (journeyProgress < 100) {
-        //         updateProgress(journeyProgress + 10);
-        //     }
-        // }
-//);
     </script>
-    <style>
-        .progress-container {
-            width: 100%;
-            margin: 20px 0;
-        }
-    
-        /* This ensures the progress bar and button are on the same row */
-        .progress-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* Pushes button to the right */
-            gap: 10px;
-        }
-    
-        .progress-bar {
-            flex-grow: 1; 
-            height: 20px;
-            background-color: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-    
-        .progress-fill {
-            height: 100%;
-            background-color: #4caf50;
-            width: 10%;
-            transition: width 0.3s ease-in-out;
-        }
-    
-        button {
-            padding: 8px 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            white-space: nowrap; /* Prevents text wrapping */
-        }
-    
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </body>
-
-
 </html>
-
-

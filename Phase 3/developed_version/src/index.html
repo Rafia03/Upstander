@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>	
+<head>
+    <title>CMHR Upstander Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #9d00ff;
+            --text-light: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(157, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: var(--bg-darker);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            animation: borderGlow 3s linear infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .tagline {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        #chatbox {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #chatlog {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: transparent;
+        }
+
+        .user-msg, .bot-msg {
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: 1rem;
+            max-width: 85%;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .user-msg {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(157, 0, 255, 0.1));
+            border: 1px solid var(--neon-blue);
+            color: var(--text-light);
+            margin-left: auto;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+
+        .bot-msg {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(157, 0, 255, 0.1));
+            border: 1px solid var(--neon-pink);
+            color: var(--text-light);
+            margin-right: auto;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
+        }
+
+        .input-area {
+            display: flex;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-top: 1px solid var(--glass-border);
+            gap: 0.75rem;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-darker);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        #userInput:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: var(--text-light);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .option-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(157, 0, 255, 0.1));
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+
+        .info-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-panel h2 {
+            color: var(--neon-blue);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            height: 0.5rem;
+            background: var(--bg-darker);
+            border-radius: 0.25rem;
+            margin-top: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 0.25rem;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.75rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .typing-indicator span {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            animation: typing 1s infinite;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-0.25rem); opacity: 1; }
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-msg, .bot-msg {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-purple);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            #chatlog {
+                height: 350px;
+                padding: 1rem;
+            }
+
+            .user-msg, .bot-msg {
+                max-width: 90%;
+            }
+
+            .input-area {
+                padding: 0.75rem;
+            }
+
+            button {
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Canadian Museum for Human Rights</h1>
+            <div class="tagline">Upstander Program: Discover Your Power to Make a Difference</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Progress tracking with button -->
+        <div class="progress-container">
+            <div>Your Upstander Journey</div>
+            <div class="progress-wrapper">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" style="width: 10%;"></div>
+                </div>
+                <button id="nextButton" class="progress-btn">Next</button>
+            </div>
+        </div>
+        
+        <div id="chatbox">
+            <div id="chatlog"></div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Type your message...">
+                <button id="sendBtn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+        
+        <!-- Strength selector (initially hidden) -->
+        <div id="strengthMeter" class="strength-meter" style="display: none;">
+            <div class="strength-item" data-strength="courage" onclick="selectStrength('courage')">
+                <div class="strength-icon">💪</div>
+                <div>Courage</div>
+            </div>
+            <div class="strength-item" data-strength="empathy" onclick="selectStrength('empathy')">
+                <div class="strength-icon">❤️</div>
+                <div>Empathy</div>
+            </div>
+            <div class="strength-item" data-strength="persistence" onclick="selectStrength('persistence')">
+                <div class="strength-icon">⏱️</div>
+                <div>Persistence</div>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h2>About the Upstander Program</h2>
+            <p>The Upstander Program at the Canadian Museum for Human Rights aims to inspire individuals to recognize injustice, identify their strengths, and take meaningful action for human rights.</p>
+            <p>Through this interactive experience, you'll discover your unique upstander qualities and learn about inspirational figures who have made a difference in the world.</p>
+            
+            <!-- This div will show upstander info based on selected strength -->
+            <div id="upstanderInfo" class="upstander-card" style="display: none;">
+                <!-- Content will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© Canadian Museum for Human Rights. This project was developed to enhance the Upstander Program experience.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Store session data
+        let sessionData = null;
+        let userStrength = "";
+        let journeyProgress = 10; // Start at 10%
+        
+        // Initialize chat with welcome message
+        document.addEventListener('DOMContentLoaded', async function() {
+            const chatlog = document.getElementById('chatlog');
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Remove typing indicator after delay and show message
+            setTimeout(() => {
+                removeTypingIndicator();
+                chatlog.innerHTML = `<div class="bot-msg">Welcome to the Canadian Museum for Human Rights Upstander Program! I'm here to help you discover your inner upstander. Would you like to learn about becoming an upstander?</div>`;
+                
+                // Initial options
+                addOptions(["Yes, I'd like to learn more", "What is an upstander?", "Tell me about the museum"]);
+            }, 1500);
+            
+            // Add button hover effects
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            sendBtn.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+        
+        function updateProgress(value) {
+            journeyProgress = value;
+            document.getElementById('progressFill').style.width = `${value}%`;
+        }
+        
+        function showTypingIndicator() {
+            const chatlog = document.getElementById('chatlog');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatlog.appendChild(typingDiv);
+            chatlog.scrollTop = chatlog.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+        
+        function selectStrength(strength) {
+            userStrength = strength;
+            
+            // Update visual indicator
+            document.querySelectorAll('.strength-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.strength-item[data-strength="${strength}"]`).classList.add('active');
+            
+            
+            // Show upstander info based on strength
+            showUpstanderInfo(strength);
+            
+            // Send the selected strength to the bot
+            sendMessage(`My strength is ${strength}`);
+        }
+        
+        function showUpstanderInfo(strength) {
+            const upstanderInfo = document.getElementById('upstanderInfo');
+            let content = '';
+            
+            if (strength === 'courage') {
+                content = `
+                    <h3>Viola Desmond</h3>
+                    <p>In 1946, Viola Desmond refused to leave a whites-only area of a Nova Scotia theater, 
+                    challenging racial segregation in Canada. Her image now appears on the Canadian $10 bill.</p>
+                `;
+            } else if (strength === 'empathy') {
+                content = `
+                    <h3>Craig Kielburger</h3>
+                    <p>At age 12, Craig was moved by the story of a child laborer and founded Free The Children 
+                    (now WE Charity) to fight child labor and promote education worldwide.</p>
+                `;
+            } else if (strength === 'persistence') {
+                content = `
+                    <h3>Nelson Mandela</h3>
+                    <p>Despite being imprisoned for 27 years for fighting against apartheid, 
+                    Nelson Mandela continued his advocacy and became South Africa's first Black president.</p>
+                `;
+            }
+            
+            upstanderInfo.innerHTML = content;
+            upstanderInfo.style.display = 'block';
+        }
+        // Function to send message to the server
+        async function sendMessage(optionText) {
+            try {
+                const userInput = document.getElementById('userInput');
+                const chatlog = document.getElementById('chatlog');
+
+                // Determine message text (user input or button click)
+                const messageText = optionText || userInput.value;
+                if (!messageText.trim()) return; // Don't send empty messages
+
+                // Add user message to chat
+                chatlog.innerHTML += `<div class="user-msg">${messageText}</div>`;
+                chatlog.scrollTop = chatlog.scrollHeight; // Auto-scroll
+
+                // Clear input field if text is typed manually
+                if (!optionText) {
+                    userInput.value = '';
+                }
+
+                // Remove previous options
+                const optionsContainer = document.querySelector('.options-container');
+                if (optionsContainer) {
+                    optionsContainer.remove();
+                }
+
+                // Show typing indicator
+                showTypingIndicator();
+
+                // Get the current port from the window location
+                const port = window.location.port || "5002"; // Default to 5002
+
+                // Send message to server with session data
+                const response = await fetch(`http://127.0.0.1:${port}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: messageText,
+                        session_data: sessionData
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to get response from server");
+                }
+
+                const data = await response.json();
+
+                // Update session data
+                sessionData = data.session_data;
+
+                // Remove typing indicator after delay and show message
+                setTimeout(() => {
+                    removeTypingIndicator();
+
+                    // Clean and process bot response
+                    let cleanResponse = data.response;
+                    // Remove debug code blocks
+                    cleanResponse = cleanResponse.replace(/```[\s\S]*?```/g, '').trim();
+                    // Remove template variables
+                    cleanResponse = cleanResponse.replace(/\{[^}]+\}/g, '').trim();
+                    chatlog.innerHTML += `<div class="bot-msg">${cleanResponse}</div>`;
+
+                    // Add next question if available
+                    if (data.next_question) {
+                        let cleanQuestion = data.next_question;
+                        // Remove debug code blocks
+                        cleanQuestion = cleanQuestion.replace(/```[\s\S]*?```/g, '').trim();
+                        // Remove template variables
+                        cleanQuestion = cleanQuestion.replace(/\{[^}]+\}/g, '').trim();
+                        setTimeout(() => {
+                            chatlog.innerHTML += `<div class="bot-msg">${cleanQuestion}</div>`;
+                            chatlog.scrollTop = chatlog.scrollHeight;
+                        }, 1000);
+                    }
+
+                    // Add options if available
+                    if (data.options && data.options.length > 0) {
+                        // Clean options of any template variables
+                        const cleanOptions = data.options.map(option => 
+                            option.replace(/\{[^}]+\}/g, '').trim()
+                        );
+                        addOptions(cleanOptions);
+                    }
+
+                    chatlog.scrollTop = chatlog.scrollHeight; // Auto-scroll
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                removeTypingIndicator();
+                document.getElementById('chatlog').innerHTML += 
+                    `<div class="bot-msg" style="color: #d9534f;">Sorry, there was an error communicating with the server. Please try again.</div>`;
+            }
+        }
+
+        function addOptions(options) {
+            const chatlog = document.getElementById('chatlog');
+            
+            // Create options container
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            // Add option buttons
+            options.forEach(option => {
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn';
+                optionBtn.textContent = option;
+                optionBtn.onclick = function() {
+                    sendMessage(option);
+                };
+                optionsContainer.appendChild(optionBtn);
+            });
+            
+            chatlog.appendChild(optionsContainer);
+            chatlog.scrollTop = chatlog.scrollHeight;
+        }
+        
+        // Allow sending message with Enter key
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        //TODO: 
+        document.getElementById("nextButton").addEventListener("click", function() {
+            sendMessage("[NEXT_STAGE]");  // Triggers the chatbot message flow
+            updateProgress(Math.min(journeyProgress + 20, 100));
+        });
+
+    </script>
+    <style>
+        .progress-container {
+            width: 100%;
+            margin: 20px 0;
+        }
+    
+        /* This ensures the progress bar and button are on the same row */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Pushes button to the right */
+            gap: 10px;
+        }
+    
+        .progress-bar {
+            flex-grow: 1; 
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+    
+        .progress-fill {
+            height: 100%;
+            background-color: #4caf50;
+            width: 10%;
+            transition: width 0.3s ease-in-out;
+        }
+    
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap; /* Prevents text wrapping */
+        }
+    
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</body>
+
+
+</html>
+
