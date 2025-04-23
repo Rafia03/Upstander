@@ -14,12 +14,24 @@ This project aims to enhance the **Canadian Museum for Human Rights (CMHR)** Ups
 
 - **AI-Driven Chatbot**: A conversational AI chatbot that interacts with users, asks about their interests, and provides personalized recommendations.
 - **Personalized Recommendations**: Tailored content based on user inputs, such as interests, strengths, and preferred learning styles.
-- **In-Gallery Integration**: Use of **Universal Access Points (UAPs)** data to provide location-specific information and enhance the in-gallery experience.
+  
+## Chatbot Design Principles
+
+- **Defined Persona**: Establishing a specific attitude and communication style for the chatbot.
+
+- **Operational Rules**: Implementing clear guidelines the chatbot must follow.
+
+- **Adaptive Prompting**: Using selective and multi-stage prompts, where the instructions given to the AI change based on the user's choices or the current stage of the conversation.
+
+- **Guided Interaction**: Providing users with options or suggestions to steer the conversation effectively.
+
+- **Hybrid Response Strategy**: Combining pre-defined (default) answers for guaranteed accuracy on specific topics with AI-generated responses to maintain a natural and appropriate conversational tone.
+
 
 ## Technologies Used
 
 - **Natural Language Processing (NLP)**: For building the conversational AI chatbot.
-- **OpenAI's ChatGPT API**: To power the chatbot interactions.
+- **Google's Gemini flash2.0 API**: To power the chatbot interactions.
 - **Pandas**: For processing and analyzing UAP data.
 - **Flask**: For building the backend server.
 - **Other Libraries**: Additional Python libraries for data processing, recommendation systems, and user interface development.
