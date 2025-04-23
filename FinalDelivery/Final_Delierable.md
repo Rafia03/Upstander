@@ -104,7 +104,6 @@ Areas for future development:
 
 ### a. Presentation Materials
 - Presentation slides
-- Video recording of the demo
 
 
 ### b. Key Features to Demonstrate
