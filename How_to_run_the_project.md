@@ -87,15 +87,15 @@ Upstander-main/
 
 ## Chatbot Design Principles
 
-- **Defined Persona**: Establishing a specific attitude and communication style for the chatbot.
+1. **Defined Persona**: Establishing a specific attitude and communication style for the chatbot.
 
-- **Operational Rules**: Implementing clear guidelines the chatbot must follow.
+2. **Operational Rules**: Implementing clear guidelines the chatbot must follow.
 
-- **Adaptive Prompting**: Using selective and multi-stage prompts, where the instructions given to the AI change based on the user's choices or the current stage of the conversation.
+3. **Adaptive Prompting**: Using selective and multi-stage prompts, where the instructions given to the AI change based on the user's choices or the current stage of the conversation.
 
-- **Guided Interaction**: Providing users with options or suggestions to steer the conversation effectively.
+4. **Guided Interaction**: Providing users with options or suggestions to steer the conversation effectively.
 
-- **Hybrid Response Strategy**: Combining pre-defined (default) answers for guaranteed accuracy on specific topics with AI-generated responses to maintain a natural and appropriate conversational tone.
+5. **Hybrid Response Strategy**: Combining pre-defined (default) answers for guaranteed accuracy on specific topics with AI-generated responses to maintain a natural and appropriate conversational tone.
 
 ## Development Guidelines
 
