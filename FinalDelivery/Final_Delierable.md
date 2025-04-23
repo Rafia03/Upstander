@@ -21,7 +21,7 @@ We will be presenting our final deliverables via teams meeting.
 - Known limitations and workarounds
 
 ### c. Input/Output Files
-- UAP locations data (`uap_locations.csv`)
+- UAP locations data (embedded in code)
 - Upstander stories database (embedded in code)
 - Environment configuration template (`.env`)
 - Session storage files (in `flask_session/`)
@@ -90,10 +90,12 @@ Areas for future development:
 - Latest tag: v1.0.0
 
 ### b. Access Options
-1. Fork the repository:
-   ```bash
-   git clone [repository-url]
-   ```
+1. To run the project locally:
+- **Clone** the Git repository.
+- **Install** the required dependencies.
+- **Configure** the necessary API key(s) in the `.env` file.
+- **Start** the application by running `app.py`.
+- **Access** the chatbot via your local web browser.
 
 2. Direct access to our repository (upon request)
 
