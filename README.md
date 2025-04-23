@@ -78,11 +78,23 @@ This project aims to enhance the **Canadian Museum for Human Rights (CMHR)** Ups
 
 - **Minimum Viable Product (MVP)**: A working prototype of the personalized AI journey with a focus on one or two key interactions (e.g., a simple chatbot guiding users through a basic version of the program).
 
+## Future Development Roadmap
+
+Our plans for enhancing the chatbot include:
+
+- **Database Enhancement**: Improving the accuracy and expanding the scope of the underlying knowledge base.
+
+- **Efficient Information Retrieval**: Implementing a database-selective prompt structure, allowing the chatbot to draw information only from relevant parts of the database for a given query, rather than the entire dataset.
+
+- **Personalization**: Introducing an initial stage to identify user characteristics (like age or occupation) to tailor the conversation for a more personalized experience.
+
+
 
 ## Contributors
 
 - **Rafia Rafa Islam**
 - **Chin Wei, Mak**
+
 ## Acknowledgments
 
 We would like to thank **Canadian Museum for Human Rights (CMHR)** for guidance and support throughout this project.
